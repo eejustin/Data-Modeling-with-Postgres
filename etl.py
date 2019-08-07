@@ -6,6 +6,18 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    Description: This function can be used to read the file in the filepath (data/song_data)
+    to get the song info and used to populate the songplay fact and artist dim tables.
+
+    Arguments:
+        cur: the cursor object. 
+        filepath: song data file path. 
+
+    Returns:
+        None
+    """
+
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -27,6 +39,17 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+    Description: This function can be used to read the file in the filepath (data/log_data)
+    to get the user and time info and used to populate the users and time dim tables.
+
+    Arguments:
+        cur: the cursor object. 
+        filepath: log data file path. 
+
+    Returns:
+        None
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -78,6 +101,20 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Description: This function can be used to read the file in the filepath 
+    to get all files under a perticular file path, depending on what type of files
+    function func will be invoked to process a perticular type of file
+
+    Arguments:
+        cur: the cursor object.
+        conn: the connection to designated database
+        filepath: data file path. 
+        func: either process_log_file or process_song_file
+
+    Returns:
+        None
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -97,6 +134,17 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    Description: This the entry point of the program. It first builds the connection
+    to the designated database, the calls to process song_data and long_data files
+    in order to populate fact and dim tables in that database
+
+    Arguments:
+        None
+
+    Returns:
+        None
+    """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
